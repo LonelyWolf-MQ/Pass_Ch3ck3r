@@ -105,12 +105,19 @@ def hasPatterns(password):
     letter_pat1 = "qwertyuiop"
     letter_pat2 = "asdfghjkl"
     letter_pat3 = "zxcvbnm"
+    letter_pat4 = "qazwsxedcrfvtgbyhnujmikolp"
+    letter_pat5 = "qazxswedcvfrtgbnyujmkiop"
+    letter_pat6 = "wazesxrdctfvygbuhnijmok"
     number_pat = "123456789"
     symbol_pat = "!@#$%^&*()-=+`/'"
     letter_rows = [
         letter_pat1, letter_pat1[::-1],
         letter_pat2, letter_pat2[::-1],
-        letter_pat3, letter_pat3[::-1]
+        letter_pat3, letter_pat3[::-1],
+        letter_pat4, letter_pat4[::-1],
+        letter_pat5, letter_pat5[::-1],
+        letter_pat6, letter_pat6[::-1]
+
     ]
     num_row = [
         number_pat, number_pat[::-1],
