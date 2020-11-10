@@ -35,7 +35,7 @@ def score(isCap, isSml, Num, Sym, ptr, length, isdict):
                 else:
                     return score
         elif (isCap and isSml and Num) > 0:
-            score = 7
+            score = 6
             if isdict is True:
                 score -= 2
                 if 'Symbol pattern found' in ptr:
@@ -59,6 +59,33 @@ def score(isCap, isSml, Num, Sym, ptr, length, isdict):
                     return score
         elif (isCap or isSml) > 0:
             score = 4
+            if isdict is True:
+                score -= 2
+                if 'Symbol pattern found' in ptr:
+                    score -= -1
+                elif 'Letter pattern found' in ptr:
+                    score -= 2
+                elif 'Number pattern found' in ptr:
+                    score -= 1.5
+                if score < 0:
+                    score = 0
+                    return score
+                else:
+                    return score
+            elif isdict is False:
+                if 'Symbol pattern found' in ptr:
+                    score -= -1
+                elif 'Letter pattern found' in ptr:
+                    score -= 2
+                elif 'Number pattern found' in ptr:
+                    score -= 1.5
+                if score < 0:
+                    score = 0
+                    return score
+                else:
+                    return score
+        elif (Num and Sym) > 0:
+            score = 6
             if isdict is True:
                 score -= 2
                 if 'Symbol pattern found' in ptr:
@@ -108,32 +135,34 @@ def hasPatterns(password):
     letter_pat4 = "qazwsxedcrfvtgbyhnujmikolp"
     letter_pat5 = "qazxswedcvfrtgbnyujmkiop"
     letter_pat6 = "wazesxrdctfvygbuhnijmok"
+    letter_pat7 = "qszwdxefcrgvthbyjnukmil"
     number_pat = "123456789"
     symbol_pat = "!@#$%^&*()-=+`/'"
+    symbol_pat_rev = "%$#@!"
     letter_rows = [
         letter_pat1, letter_pat1[::-1],
         letter_pat2, letter_pat2[::-1],
         letter_pat3, letter_pat3[::-1],
         letter_pat4, letter_pat4[::-1],
         letter_pat5, letter_pat5[::-1],
-        letter_pat6, letter_pat6[::-1]
-
+        letter_pat6, letter_pat6[::-1],
+        letter_pat7, letter_pat7[::-1]
     ]
     num_row = [
-        number_pat, number_pat[::-1],
+        number_pat, number_pat[::-1]
     ]
     sym_row = [
-        symbol_pat, symbol_pat[::-1]
+         symbol_pat, symbol_pat[::-1]
     ]
     for index in range(0, len(passwd)-2):
         sequence = passwd[index:index+3]
-        for i in range(0, len(letter_rows)-1):
+        for i in range(0, len(letter_rows)):
             if sequence in letter_rows[i]:
                 list_of_results['L'] = 'Letter pattern found'
-        for i in range(0, len(num_row)-1):
+        for i in range(0, len(num_row)):
             if sequence in num_row[i]:
                 list_of_results['N'] = 'Number pattern found'
-        for i in range(0, len(sym_row)-1):
+        for i in range(0, len(sym_row)):
             if sequence in sym_row[i]:
                 list_of_results['S'] = 'Symbol pattern found'
     if len(list_of_results) > 0:
@@ -215,7 +244,7 @@ def main():
             print(x)
     mat = isDict('Common-100k-pass.txt', Password)
     scr = score(Count_Cpl, Count_Sml, Count_Num,
-                Count_Spchar, Pr, Pass_len, mat)
+                Count_Spchar, Pr.values(), Pass_len, mat)
     if mat is True:
         print('Found a password in the common password list')
     elif mat is False:
